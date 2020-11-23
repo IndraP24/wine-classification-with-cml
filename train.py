@@ -25,7 +25,7 @@ X_train, X_test, y_train, y_test = train_test_split(data, y, test_size=0.2, rand
 #################################
 
 # Fit model on train dataset
-rf = RandomForestRegressor(n_estimators=200, max_depth=20)
+rf = RandomForestRegressor(n_estimators=900, max_depth=10, )
 rf.fit(X_train, y_train)
 
 # Report training set scores
