@@ -25,13 +25,13 @@ X_train, X_test, y_train, y_test = train_test_split(data, y, test_size=0.2, rand
 #################################
 
 # Fit model on train dataset
-rf = RandomForestRegressor(n_estimators=200, max_depth=5)
+rf = RandomForestRegressor(n_estimators=200, max_depth=20)
 rf.fit(X_train, y_train)
 
 # Report training set scores
-train_score = rf.score(X_train, y_train)
+train_score = rf.score(X_train, y_train) * 100
 # Report testing set scores
-test_score = rf.score(X_test, y_test)
+test_score = rf.score(X_test, y_test) * 100
 
 # write scores to a file
 with open("metrics.txt", "w") as f:
