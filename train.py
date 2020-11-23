@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 
 from sklearn.model_selection import train_test_split
-from sklearn.ensemble import RandomForestClassifier
+from sklearn.ensemble import RandomForestRegressor
 
 # set random seed
 seed = 90
@@ -17,15 +17,15 @@ seed = 90
 data = pd.read_csv("wine_quality.csv")
 
 # Split into train and test sets
-y = data['quality']
-X_train, X_test, y_train, y_test = train_test_split(data.drop['quality'], y, test_size=0.2, random_state=seed)
+y = data.pop("quality")
+X_train, X_test, y_train, y_test = train_test_split(data, y, test_size=0.2, random_state=seed)
 
 #################################
 ########## MODELLING ############
 #################################
 
 # Fit model on train dataset
-rf = RandomForestClassifier(n_estimators=200, max_depth=5)
+rf = RandomForestRegressor(n_estimators=200, max_depth=5)
 rf.fit(X_train, y_train)
 
 # Report training set scores
