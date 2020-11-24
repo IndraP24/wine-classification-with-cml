@@ -19,14 +19,14 @@ data = pd.read_csv("wine_quality.csv")
 # Split into train and test sets
 X = data.drop(["quality"], axis=1)
 y = data["quality"]
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=seed)
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=seed)
 
 #################################
 ########## MODELLING ############
 #################################
 
 # Fit model on train dataset
-rf = RandomForestRegressor(n_estimators=900, max_depth=10, )
+rf = RandomForestRegressor(n_estimators=200, max_depth=10)
 rf.fit(X_train, y_train)
 
 # Report training set scores
