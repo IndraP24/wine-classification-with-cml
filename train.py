@@ -30,7 +30,7 @@ rf = RandomForestRegressor(n_estimators=200, max_depth=7)
 rf.fit(X_train, y_train)
 
 # Report training set scores
-train_score = rf.best_score_(X_train, y_train) * 100
+train_score = rf.score(X_train, y_train) * 100
 # Report testing set scores
 test_score = rf.score(X_test, y_test) * 100
 
