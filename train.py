@@ -4,7 +4,6 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 
 from sklearn.model_selection import train_test_split
-from sklearn.preprocessing import MinMaxScaler
 from sklearn.ensemble import RandomForestRegressor
 
 # set random seed
@@ -20,22 +19,18 @@ data = pd.read_csv("wine_quality.csv")
 # Split into train and test sets
 X = data.drop(["quality"], axis=1)
 y = data["quality"]
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.4, random_state=seed)
-
-scaler = MinMaxScaler()
-X_train = scaler.fit_transform(X_train)
-X_test = scaler.transform(X_test)
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=seed)
 
 #################################
 ########## MODELLING ############
 #################################
 
 # Fit model on train dataset
-rf = RandomForestRegressor(n_estimators=200, max_depth=10)
+rf = RandomForestRegressor(n_estimators=200, max_depth=7)
 rf.fit(X_train, y_train)
 
 # Report training set scores
-train_score = rf.score(X_train, y_train) * 100
+train_score = rf.best_score_(X_train, y_train) * 100
 # Report testing set scores
 test_score = rf.score(X_test, y_test) * 100
 
@@ -89,8 +84,3 @@ plt.xlim((2.5, 8.5))
 
 plt.tight_layout()
 plt.savefig("residuals.png", dpi=120)
-
-######## PLOT OVERSAMPLING ########
-ax = plt.pie(data["quality"].value_counts())
-plt.tight_layout()
-plt.savefig("pie.png", dpi=120)
