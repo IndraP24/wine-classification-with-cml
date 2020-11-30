@@ -6,7 +6,7 @@ import seaborn as sns
 from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestClassifier
-from sklearn.metrics import confusion_matrix, accuracy_score
+from sklearn.metrics import confusion_matrix
 
 # set random seed
 seed = 90
@@ -20,12 +20,10 @@ data = pd.read_csv("wine_quality.csv")
 
 # Feature Engineering
 #1 - Bad
-#2 - Average
-#3 - Excellent
+#2 - Good
 #This will be split in the following way. 
-#1,2,3 --> Bad
-#4,5,6,7 --> Average
-#8,9,10 --> Excellent
+#1,2,3,4 --> Bad
+#5,6,7,8,9,10 --> Good
 #Create an empty list called Reviews
 reviews = []
 for i in data['quality']:
@@ -56,9 +54,9 @@ rf.fit(X_train, y_train)
 y_pred = rf.predict(X_test)
 
 # Report training set scores
-train_score = accuracy_score(X_train, y_train) * 100
+train_score = rf.score(X_train, y_train) * 100
 # Report testing set scores
-test_score = accuracy_score(X_test, y_test) * 100
+test_score = rf.score(X_test, y_test) * 100
 
 # Report confusion matrix
 conf_matrix = confusion_matrix(y_test, lr_predict)
