@@ -3,8 +3,10 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 
+from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import train_test_split
-from sklearn.ensemble import RandomForestRegressor
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.metrics import plot_confusion_matrix
 
 # set random seed
 seed = 90
@@ -16,9 +18,30 @@ seed = 90
 # Load the data
 data = pd.read_csv("wine_quality.csv")
 
-# Split into train and test sets
-X = data.drop(["quality"], axis=1)
-y = data["quality"]
+# Feature Engineering
+#1 - Bad
+#2 - Good
+#This will be split in the following way. 
+#1,2,3,4 --> Bad
+#5,6,7,8,9,10 --> Good
+#Create an empty list called Reviews
+reviews = []
+for i in data['quality']:
+    if i >= 1 and i <= 4:
+        reviews.append(0)
+    elif i >= 4 and i <= 10:
+        reviews.append(1)
+data['Reviews'] = reviews
+
+
+# Scaling and Split into train and test sets
+X = data.drop(["quality", "Reviews"], axis=1)
+
+sc = StandardScaler()
+X = sc.fit_transform(X)
+
+y = data["Reviews"]
+
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=seed)
 
 #################################
@@ -26,8 +49,9 @@ X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_
 #################################
 
 # Fit model on train dataset
-rf = RandomForestRegressor(n_estimators=200, max_depth=7)
+rf = RandomForestClassifier(n_estimators=200, max_depth=10)
 rf.fit(X_train, y_train)
+y_pred = rf.predict(X_test)
 
 # Report training set scores
 train_score = rf.score(X_train, y_train) * 100
@@ -36,8 +60,8 @@ test_score = rf.score(X_test, y_test) * 100
 
 # write scores to a file
 with open("metrics.txt", "w") as f:
-    f.write("Training variance explained: %2.1f%%\n" % train_score)
-    f.write("Test variance explained: %2.1f%%\n" % test_score)
+    f.write("Training accuracy explained: %2.1f%%\n" % train_score)
+    f.write("Test accuracy explained: %2.1f%%\n" % test_score)
 
 ##########################################
 ##### PLOT FEATURE IMPORTANCE ############
@@ -64,23 +88,10 @@ plt.close()
 
 
 ##########################################
-############ PLOT RESIDUALS  #############
+############ PLOT CONFUSION MATRIX  #############
 ##########################################
 
-y_pred = rf.predict(X_test) + np.random.normal(0, 0.25, len(y_test))
-y_jitter = y_test + np.random.normal(0, 0.25, len(y_test))
-res_data = pd.DataFrame(list(zip(y_jitter, y_pred)), columns=["true", "pred"])
-
-ax = sns.scatterplot(x="true", y="pred", data=res_data)
-ax.set_aspect('equal')
-ax.set_xlabel('True wine quality', fontsize=axis_fs)
-ax.set_ylabel('Predicted wine quality', fontsize=axis_fs)  # ylabel
-ax.set_title('Residuals', fontsize=title_fs)
-
-# Make it pretty- square aspect ratio
-ax.plot([1, 10], [1, 10], 'black', linewidth=1)
-plt.ylim((2.5, 8.5))
-plt.xlim((2.5, 8.5))
+plot_confusion_matrix(rf, X_test, y_test)
 
 plt.tight_layout()
 plt.savefig("residuals.png", dpi=120)
