@@ -6,6 +6,7 @@ import seaborn as sns
 from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestClassifier
+from sklearn.metrics import confusion_matrix, accuracy_score
 
 # set random seed
 seed = 90
@@ -54,16 +55,21 @@ X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_
 # Fit model on train dataset
 rf = RandomForestClassifier(n_estimators=200, max_depth=10)
 rf.fit(X_train, y_train)
+y_pred = rf.predict(X_test)
 
 # Report training set scores
-train_score = rf.score(X_train, y_train) * 100
+train_score = accuracy_score(X_train, y_train) * 100
 # Report testing set scores
-test_score = rf.score(X_test, y_test) * 100
+test_score = accuracy_score(X_test, y_test) * 100
+
+# Report confusion matrix
+conf_matrix = confusion_matrix(y_test, lr_predict)
 
 # write scores to a file
 with open("metrics.txt", "w") as f:
-    f.write("Training variance explained: %2.1f%%\n" % train_score)
-    f.write("Test variance explained: %2.1f%%\n" % test_score)
+    f.write("Training accuracy explained: %2.1f%%\n" % train_score)
+    f.write("Test accuracy explained: %2.1f%%\n" % test_score)
+    f.write("Confusion Matrix: ", conf_matrix)
 
 ##########################################
 ##### PLOT FEATURE IMPORTANCE ############
@@ -93,8 +99,8 @@ plt.close()
 ############ PLOT RESIDUALS  #############
 ##########################################
 
-y_pred = rf.predict(X_test) + np.random.normal(0, 0.25, len(y_test))
-y_jitter = y_test + np.random.normal(0, 0.25, len(y_test))
+y_pred = rf.predict(X_test)
+y_jitter = y_test
 res_data = pd.DataFrame(list(zip(y_jitter, y_pred)), columns=["true", "pred"])
 
 ax = sns.scatterplot(x="true", y="pred", data=res_data)
