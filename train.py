@@ -29,12 +29,10 @@ data = pd.read_csv("wine_quality.csv")
 #Create an empty list called Reviews
 reviews = []
 for i in data['quality']:
-    if i >= 1 and i <= 3:
-        reviews.append('1')
-    elif i >= 4 and i <= 7:
-        reviews.append('2')
-    elif i >= 8 and i <= 10:
-        reviews.append('3')
+    if i >= 1 and i <= 4:
+        reviews.append(0)
+    elif i >= 4 and i <= 10:
+        reviews.append(1)
 data['Reviews'] = reviews
 
 
