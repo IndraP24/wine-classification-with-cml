@@ -3,8 +3,9 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 
+from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import train_test_split
-from sklearn.ensemble import RandomForestRegressor
+from sklearn.ensemble import RandomForestClassifier
 
 # set random seed
 seed = 90
@@ -16,9 +17,34 @@ seed = 90
 # Load the data
 data = pd.read_csv("wine_quality.csv")
 
-# Split into train and test sets
-X = data.drop(["quality"], axis=1)
-y = data["quality"]
+# Feature Engineering
+#1 - Bad
+#2 - Average
+#3 - Excellent
+#This will be split in the following way. 
+#1,2,3 --> Bad
+#4,5,6,7 --> Average
+#8,9,10 --> Excellent
+#Create an empty list called Reviews
+reviews = []
+for i in data['quality']:
+    if i >= 1 and i <= 3:
+        reviews.append('1')
+    elif i >= 4 and i <= 7:
+        reviews.append('2')
+    elif i >= 8 and i <= 10:
+        reviews.append('3')
+data['Reviews'] = reviews
+
+
+# Scaling and Split into train and test sets
+X = data.drop(["quality", "Reviews"], axis=1)
+
+sc = StandardScaler()
+X = sc.fit_transform(X)
+
+y = data["Reviews"]
+
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=seed)
 
 #################################
@@ -26,7 +52,7 @@ X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_
 #################################
 
 # Fit model on train dataset
-rf = RandomForestRegressor(n_estimators=200, max_depth=7)
+rf = RandomForestClassifier(n_estimators=200, max_depth=10)
 rf.fit(X_train, y_train)
 
 # Report training set scores
