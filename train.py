@@ -59,7 +59,7 @@ train_score = rf.score(X_train, y_train) * 100
 test_score = rf.score(X_test, y_test) * 100
 
 # Report confusion matrix
-conf_matrix = confusion_matrix(y_test, lr_predict)
+conf_matrix = confusion_matrix(y_test, y_pred)
 
 # write scores to a file
 with open("metrics.txt", "w") as f:
@@ -95,7 +95,6 @@ plt.close()
 ############ PLOT RESIDUALS  #############
 ##########################################
 
-y_pred = rf.predict(X_test)
 y_jitter = y_test
 res_data = pd.DataFrame(list(zip(y_jitter, y_pred)), columns=["true", "pred"])
 
