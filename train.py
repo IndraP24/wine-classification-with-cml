@@ -58,14 +58,10 @@ train_score = rf.score(X_train, y_train) * 100
 # Report testing set scores
 test_score = rf.score(X_test, y_test) * 100
 
-# Report confusion matrix
-conf_matrix = confusion_matrix(y_test, y_pred)
-
 # write scores to a file
 with open("metrics.txt", "w") as f:
     f.write("Training accuracy explained: %2.1f%%\n" % train_score)
     f.write("Test accuracy explained: %2.1f%%\n" % test_score)
-    f.write("Confusion Matrix: ", conf_matrix)
 
 ##########################################
 ##### PLOT FEATURE IMPORTANCE ############
