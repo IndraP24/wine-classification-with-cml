@@ -6,7 +6,7 @@ import seaborn as sns
 from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestClassifier
-from sklearn.metrics import confusion_matrix
+from sklearn.metrics import plot_confusion_matrix
 
 # set random seed
 seed = 90
@@ -92,22 +92,10 @@ plt.close()
 
 
 ##########################################
-############ PLOT RESIDUALS  #############
+############ PLOT CONFUSION MATRIX  #############
 ##########################################
 
-y_jitter = y_test
-res_data = pd.DataFrame(list(zip(y_jitter, y_pred)), columns=["true", "pred"])
-
-ax = sns.scatterplot(x="true", y="pred", data=res_data)
-ax.set_aspect('equal')
-ax.set_xlabel('True wine quality', fontsize=axis_fs)
-ax.set_ylabel('Predicted wine quality', fontsize=axis_fs)  # ylabel
-ax.set_title('Residuals', fontsize=title_fs)
-
-# Make it pretty- square aspect ratio
-ax.plot([1, 10], [1, 10], 'black', linewidth=1)
-plt.ylim((2.5, 8.5))
-plt.xlim((2.5, 8.5))
+plot_confusion_matrix(rf, X_test, y_test)
 
 plt.tight_layout()
 plt.savefig("residuals.png", dpi=120)
