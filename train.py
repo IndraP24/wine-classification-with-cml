@@ -39,17 +39,16 @@ X = data.drop(["quality", "Reviews"], axis=1)
 
 sc = StandardScaler()
 X = sc.fit_transform(X)
-
 y = data["Reviews"]
 
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=seed)
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.4, random_state=seed)
 
 #################################
 ########## MODELLING ############
 #################################
 
 # Fit model on train dataset
-rf = RandomForestClassifier(n_estimators=200, max_depth=10)
+rf = RandomForestClassifier(n_estimators=200, max_depth=20)
 rf.fit(X_train, y_train)
 y_pred = rf.predict(X_test)
 
@@ -60,8 +59,8 @@ test_score = rf.score(X_test, y_test) * 100
 
 # write scores to a file
 with open("metrics.txt", "w") as f:
-    f.write("Training accuracy explained: %2.1f%%\n" % train_score)
-    f.write("Test accuracy explained: %2.1f%%\n" % test_score)
+    f.write("Training accuracy score: %2.2f%%\n" % train_score)
+    f.write("Test accuracy score: %2.2f%%\n" % test_score)
 
 ##########################################
 ##### PLOT FEATURE IMPORTANCE ############
@@ -94,4 +93,4 @@ plt.close()
 plot_confusion_matrix(rf, X_test, y_test)
 
 plt.tight_layout()
-plt.savefig("residuals.png", dpi=120)
+plt.savefig("confmat.png", dpi=120)
