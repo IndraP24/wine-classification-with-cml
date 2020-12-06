@@ -59,8 +59,8 @@ test_score = rf.score(X_test, y_test) * 100
 
 # write scores to a file
 with open("metrics.txt", "w") as f:
-    f.write("Training accuracy explained: %2.1f%%\n" % train_score)
-    f.write("Test accuracy explained: %2.1f%%\n" % test_score)
+    f.write("Training accuracy score: %2.2f%%\n" % train_score)
+    f.write("Test accuracy score: %2.2f%%\n" % test_score)
 
 ##########################################
 ##### PLOT FEATURE IMPORTANCE ############
@@ -93,4 +93,4 @@ plt.close()
 plot_confusion_matrix(rf, X_test, y_test)
 
 plt.tight_layout()
-plt.savefig("residuals.png", dpi=120)
+plt.savefig("confmat.png", dpi=120)
