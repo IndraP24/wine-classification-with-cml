@@ -39,17 +39,16 @@ X = data.drop(["quality", "Reviews"], axis=1)
 
 sc = StandardScaler()
 X = sc.fit_transform(X)
-
 y = data["Reviews"]
 
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=seed)
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.4, random_state=seed)
 
 #################################
 ########## MODELLING ############
 #################################
 
 # Fit model on train dataset
-rf = RandomForestClassifier(n_estimators=200, max_depth=10)
+rf = RandomForestClassifier(n_estimators=200, max_depth=20)
 rf.fit(X_train, y_train)
 y_pred = rf.predict(X_test)
 
